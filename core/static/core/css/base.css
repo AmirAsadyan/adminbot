@@ -1,0 +1,137 @@
+/* Base styles for AdminBot */
+
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-success: #059669;
+  --color-error: #dc2626;
+  --spacing: 1rem;
+  --radius: 0.375rem;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f172a;
+    --color-text: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+    --color-accent: #3b82f6;
+    --color-accent-hover: #60a5fa;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: calc(var(--spacing) * 3) var(--spacing);
+  width: 100%;
+}
+
+h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: calc(var(--spacing) * 1.5);
+  letter-spacing: -0.025em;
+}
+
+p {
+  margin-bottom: var(--spacing);
+  color: var(--color-text-muted);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: calc(var(--spacing) * 0.75) calc(var(--spacing) * 2);
+  margin: calc(var(--spacing) * 2) 0;
+  padding: calc(var(--spacing) * 1.5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+dt {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+dd {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+dd:has(.status-ok) {
+  color: var(--color-success);
+}
+
+dd:has(.status-error) {
+  color: var(--color-error);
+}
+
+.status-ok::before {
+  content: "✓ ";
+}
+
+.status-error::before {
+  content: "✗ ";
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.875rem;
+  }
+
+  dl {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing) * 0.5);
+  }
+
+  dd {
+    margin-bottom: calc(var(--spacing) * 0.75);
+  }
+}
+
+.endpoint-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.endpoint-list li {
+  margin: 0.5rem 0;
+}

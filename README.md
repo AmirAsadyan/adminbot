@@ -83,6 +83,18 @@ Then open:
 python manage.py test
 ```
 
+## Development shortcuts
+
+The `Makefile` provides shortcuts for common commands (`make help` lists them all):
+
+```bash
+make install    # install dependencies
+make migrate    # run database migrations
+make superuser  # create a Django superuser
+make test       # run the test suite
+make run        # start the development server
+```
+
 ## Project structure
 
 ```
