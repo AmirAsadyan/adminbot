@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analysis report — AdminBot</title>
+</head>
+<body>
+  <main>
+    <h1>Analysis report</h1>
+    <dl>
+      <dt>Submitted URL</dt><dd>{{ analysis.submitted_url }}</dd>
+      <dt>Status</dt><dd>{{ analysis.get_status_display }}</dd>
+      {% if analysis.final_url %}
+        <dt>Final URL</dt><dd>{{ analysis.final_url }}</dd>
+      {% endif %}
+      {% if analysis.http_status %}
+        <dt>HTTP status</dt><dd>{{ analysis.http_status }}</dd>
+      {% endif %}
+      {% if analysis.error_category %}
+        <dt>Error</dt><dd>{{ analysis.error_category }}</dd>
+      {% endif %}
+      <dt>Created</dt><dd>{{ analysis.created_at }}</dd>
+      {% if analysis.completed_at %}
+        <dt>Completed</dt><dd>{{ analysis.completed_at }}</dd>
+      {% endif %}
+    </dl>
+    {% if analysis.status == "succeeded" %}
+      <h2>Extracted metadata</h2>
+      <dl>
+        <dt>Title</dt><dd>{{ analysis.title|default:"—" }}</dd>
+        <dt>Meta description</dt><dd>{{ analysis.meta_description|default:"—" }}</dd>
+        <dt>Detected language</dt><dd>{{ analysis.detected_language|default:"—" }}</dd>
+      </dl>
+      {% if analysis.headings %}
+        <h2>Headings</h2>
+        <ul>
+          {% for heading in analysis.headings %}
+            <li>{{ heading }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <h2>Internal links</h2>
+      <p><small>Link categories are heuristic guesses based on URL paths and anchor text; they may be wrong.</small></p>
+      {% if analysis.links %}
+        <table>
+          <thead>
+            <tr><th>URL</th><th>Anchor text</th><th>Category</th></tr>
+          </thead>
+          <tbody>
+            {% for link in analysis.links %}
+              <tr>
+                <td>{{ link.url }}</td>
+                <td>{{ link.text|default:"—" }}</td>
+                <td>{{ link.category }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No internal links found.</p>
+      {% endif %}
+    {% endif %}
+    <p><a href="{% url 'website_analysis:analyze' %}">Back to website analysis</a></p>
+  </main>
+</body>
+</html>

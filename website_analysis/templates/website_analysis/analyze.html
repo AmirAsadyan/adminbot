@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Website analysis — AdminBot</title>
+</head>
+<body>
+  <main>
+    <h1>Website analysis</h1>
+    {% if business_website %}
+      <p>Configured business website: <a href="{{ business_website }}">{{ business_website }}</a></p>
+    {% else %}
+      <p>No business website configured yet. <a href="{% url 'business_profile:edit' %}">Set it in the business profile</a>.</p>
+    {% endif %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div>
+        {{ form.url.label_tag }}
+        {{ form.url }}
+        {{ form.url.errors }}
+      </div>
+      <button type="submit">Analyze</button>
+    </form>
+    <h2>Recent analyses</h2>
+    {% if recent_analyses %}
+      <table>
+        <thead>
+          <tr><th>Submitted URL</th><th>Status</th><th>Created</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for analysis in recent_analyses %}
+            <tr>
+              <td>{{ analysis.submitted_url }}</td>
+              <td>{{ analysis.get_status_display }}</td>
+              <td>{{ analysis.created_at }}</td>
+              <td><a href="{% url 'website_analysis:detail' analysis.pk %}">View</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No analyses yet.</p>
+    {% endif %}
+    <p><a href="{% url 'core:home' %}">Back to home</a></p>
+  </main>
+</body>
+</html>
