@@ -1,16 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AdminBot</title>
+  <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
 <body>
   <main>
     <h1>AdminBot</h1>
-    <p>Project foundation is up and running. More features will arrive in later tasks.</p>
-    <p>Health status: <a href="{% url 'core:health-check' %}">/health/</a></p>
+    <p>Self-hosted social media content automation. Project foundation is up and running.</p>
+    <p>Available endpoints:</p>
+    <ul class="endpoint-list">
+      <li><a href="{% url 'core:health-check' %}">Health check</a> - uptime monitoring endpoint</li>
+      <li><a href="{% url 'core:system-status' %}">System status</a> - staff-only diagnostics</li>
+      <li><a href="{% url 'business_profile:edit' %}">Business profile</a> - staff-only business settings</li>
+      <li><a href="{% url 'website_analysis:analyze' %}">Website analysis</a> - staff-only site analysis</li>
+      <li><a href="{% url 'business_catalog:list' %}">Business catalog</a> - staff-only product/service catalog</li>
+      <li><a href="{% url 'setup_wizard:placeholder' %}">Setup wizard</a> - placeholder for future installer</li>
+      <li><a href="{% url 'admin:index' %}">Admin</a> - Django administration</li>
+    </ul>
   </main>
 </body>
 </html>
