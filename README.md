@@ -3,9 +3,10 @@
 Self-hosted social media content automation, sold as source code.
 Customers install it on their own servers.
 
-> **Status: Task 01 — project foundation only.**
+> **Status: Task 02 — application foundation and configuration.**
 > This repository currently contains a minimal, runnable Django project:
-> a landing page and a health-check endpoint. No business features yet.
+> a landing page, a health-check endpoint, a staff-only system-status page,
+> and a placeholder for the future setup wizard. No business features yet.
 
 ## Prerequisites
 
@@ -65,6 +66,8 @@ Then open:
 
 - Home page: <http://127.0.0.1:8000/>
 - Health check: <http://127.0.0.1:8000/health/> (returns `{"status": "ok"}`)
+- System status: <http://127.0.0.1:8000/system-status/> (staff users only; shows application/database/debug state, returns 503 if the database is unreachable)
+- Setup wizard (placeholder): <http://127.0.0.1:8000/setup/>
 - Admin: <http://127.0.0.1:8000/admin/>
 
 ## Running tests
@@ -78,13 +81,23 @@ python manage.py test
 ```
 adminbot/
 ├── config/                 # Django project configuration (settings, URLs, WSGI/ASGI)
-├── core/                   # Minimal app: home page, health check, tests
+├── core/                   # Home page, health check, staff-only system-status page, tests
 │   └── templates/core/     # Django templates (HTMX loaded on the home page)
+├── setup_wizard/           # Placeholder foundation for the future web-based setup wizard
+│   └── templates/setup_wizard/
 ├── manage.py
 ├── requirements.txt
 ├── .env.example            # Placeholders only — never real secrets
 └── README.md
 ```
+
+### Apps
+
+- **core**: landing page (`/`), health-check endpoint (`/health/`), and the
+  staff-only system-status page (`/system-status/`).
+- **setup_wizard**: placeholder foundation for the future installer.
+  The actual setup wizard is **not implemented yet** — `/setup/` renders a
+  static placeholder page and performs no configuration changes.
 
 ## Scope boundary
 

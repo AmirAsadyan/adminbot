@@ -9,4 +9,5 @@ app_name = "core"
 urlpatterns = [
     path("", views.home, name="home"),
     path("health/", views.health_check, name="health-check"),
+    path("system-status/", views.system_status, name="system-status"),
 ]

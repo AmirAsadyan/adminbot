@@ -9,6 +9,7 @@ in later tasks.
 from pathlib import Path
 
 import environ
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +33,13 @@ SECRET_KEY = env.str(
 # SECURITY WARNING: never run with DEBUG=True in production.
 DEBUG = env.bool("DJANGO_DEBUG", default=True)
 
+# Fail fast if someone tries to run with DEBUG=False while still using
+# the insecure development placeholder secret key.
+if not DEBUG and SECRET_KEY == "django-insecure-dev-only-change-me":
+    raise ImproperlyConfigured(
+        "DJANGO_SECRET_KEY must be set to a real secret value when DJANGO_DEBUG=False."
+    )
+
 ALLOWED_HOSTS = env.list(
     "DJANGO_ALLOWED_HOSTS",
     default=["127.0.0.1", "localhost"],
@@ -45,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",
+    "setup_wizard",
 ]
 
 MIDDLEWARE = [

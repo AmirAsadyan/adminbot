@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>System Status — AdminBot</title>
+</head>
+<body>
+  <main>
+    <h1>System Status</h1>
+    <dl>
+      <dt>Application</dt>
+      <dd>{% if app_status == "ok" %}Operational{% else %}Degraded{% endif %}</dd>
+      <dt>Database</dt>
+      <dd>{% if database_ok %}Reachable{% else %}Unavailable{% endif %}</dd>
+      <dt>Debug mode</dt>
+      <dd>{% if debug_mode %}On{% else %}Off{% endif %}</dd>
+    </dl>
+    <p><a href="{% url 'core:home' %}">Back to home</a></p>
+  </main>
+</body>
+</html>
