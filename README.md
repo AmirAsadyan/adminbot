@@ -67,6 +67,7 @@ Then open:
 - Home page: <http://127.0.0.1:8000/>
 - Health check: <http://127.0.0.1:8000/health/> (returns `{"status": "ok"}`)
 - System status: <http://127.0.0.1:8000/system-status/> (staff users only; shows application/database/debug state, returns 503 if the database is unreachable)
+- Business profile: <http://127.0.0.1:8000/business-profile/> (staff users only; create and edit the business profile and brand settings)
 - Setup wizard (placeholder): <http://127.0.0.1:8000/setup/>
 - Admin: <http://127.0.0.1:8000/admin/>
 
@@ -85,6 +86,9 @@ adminbot/
 │   └── templates/core/     # Django templates (HTMX loaded on the home page)
 ├── setup_wizard/           # Placeholder foundation for the future web-based setup wizard
 │   └── templates/setup_wizard/
+├── business_profile/       # Single business profile: model, staff-only edit form, tests
+│   ├── migrations/         # 0001_initial: BusinessProfile table
+│   └── templates/business_profile/
 ├── manage.py
 ├── requirements.txt
 ├── .env.example            # Placeholders only — never real secrets
@@ -98,6 +102,24 @@ adminbot/
 - **setup_wizard**: placeholder foundation for the future installer.
   The actual setup wizard is **not implemented yet** — `/setup/` renders a
   static placeholder page and performs no configuration changes.
+- **business_profile**: the single business profile with editable brand
+  settings (`/business-profile/`, staff users only). The first visit shows an
+  empty form to create the profile; later visits edit the existing one.
+
+### Business profile
+
+- **Single-business limitation**: the current version supports exactly one
+  business profile per installation. The model enforces this by pinning the
+  profile to a single database row; saving again updates that row instead of
+  creating a new one.
+- **Creating the initial profile**: log in as a staff user (e.g. via
+  `python manage.py createsuperuser`), open `/business-profile/`, fill in
+  the form, and save. No sample or seed data is created automatically.
+- **Brand slogan toggle**: the `brand_slogan` text and the `use_brand_slogan`
+  toggle are independent. Disabling the toggle does not delete the saved
+  slogan text — it only signals that future content generation should omit
+  the slogan. Editing or clearing the slogan never affects other fields.
+
 
 ## Scope boundary
 
