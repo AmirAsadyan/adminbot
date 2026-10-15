@@ -1,0 +1,4 @@
+# Core dependencies for local development (Task 01: project foundation).
+# Production extras (e.g. the PostgreSQL driver) arrive in later tasks.
+Django>=5.0,<6.0
+django-environ>=0.11,<1.0
