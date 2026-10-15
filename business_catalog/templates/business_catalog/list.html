@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Business catalog — AdminBot</title>
+</head>
+<body>
+  <main>
+    <h1>Business catalog</h1>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="extract" />
+      <button type="submit">Extract from latest successful analysis</button>
+    </form>
+    <h2>Filter</h2>
+    <form method="get">
+      {{ filter_form.item_type.label_tag }} {{ filter_form.item_type }}
+      {{ filter_form.review_status.label_tag }} {{ filter_form.review_status }}
+      <button type="submit">Apply</button>
+      <a href="{% url 'business_catalog:list' %}">Clear</a>
+    </form>
+    <p>{{ items|length }} item(s) shown ({{ total_count }} total).</p>
+    {% if items %}
+      <table>
+        <thead>
+          <tr><th>Title</th><th>Type</th><th>Review status</th><th>Source URL</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            <tr>
+              <td>{{ item.title }}</td>
+              <td>{{ item.get_item_type_display }}</td>
+              <td>{{ item.get_review_status_display }}</td>
+              <td>{{ item.source_url }}</td>
+              <td><a href="{% url 'business_catalog:detail' item.pk %}">View</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No catalog items yet. Run the extraction above to populate the catalog from the latest successful website analysis.</p>
+    {% endif %}
+    <p><a href="{% url 'core:home' %}">Back to home</a></p>
+  </main>
+</body>
+</html>

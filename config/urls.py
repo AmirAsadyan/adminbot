@@ -8,5 +8,6 @@ urlpatterns = [
     path("setup/", include("setup_wizard.urls")),
     path("business-profile/", include("business_profile.urls")),
     path("website-analysis/", include("website_analysis.urls")),
+    path("business-catalog/", include("business_catalog.urls")),
     path("", include("core.urls")),
 ]

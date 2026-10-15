@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "setup_wizard",
     "business_profile",
     "website_analysis",
+    "business_catalog",
 ]
 
 MIDDLEWARE = [

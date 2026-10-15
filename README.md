@@ -3,10 +3,14 @@
 Self-hosted social media content automation, sold as source code.
 Customers install it on their own servers.
 
-> **Status: Task 02 — application foundation and configuration.**
+> **Status: Task 05 — business catalog foundation.**
 > This repository currently contains a minimal, runnable Django project:
 > a landing page, a health-check endpoint, a staff-only system-status page,
-> and a placeholder for the future setup wizard. No business features yet.
+> a placeholder for the future setup wizard, an editable single business
+> profile with brand settings, a staff-only website-analysis tool that
+> fetches a public homepage and extracts basic metadata, and a staff-only
+> business catalog built from that analysis data. No other business
+> features yet.
 
 ## Prerequisites
 
@@ -69,6 +73,7 @@ Then open:
 - System status: <http://127.0.0.1:8000/system-status/> (staff users only; shows application/database/debug state, returns 503 if the database is unreachable)
 - Business profile: <http://127.0.0.1:8000/business-profile/> (staff users only; create and edit the business profile and brand settings)
 - Website analysis: <http://127.0.0.1:8000/website-analysis/> (staff users only; analyze a public website homepage)
+- Business catalog: <http://127.0.0.1:8000/business-catalog/> (staff users only; review products, services, and articles extracted from the analysis)
 - Setup wizard (placeholder): <http://127.0.0.1:8000/setup/>
 - Admin: <http://127.0.0.1:8000/admin/>
 
@@ -93,6 +98,9 @@ adminbot/
 ├── website_analysis/       # Staff-only website analysis: safe fetch, parsing, reports
 │   ├── migrations/         # 0001_initial: WebsiteAnalysis table
 │   └── templates/website_analysis/
+├── business_catalog/       # Staff-only catalog of products/services/articles
+│   ├── migrations/         # 0001_initial: CatalogItem table
+│   └── templates/business_catalog/
 ├── manage.py
 ├── requirements.txt
 ├── .env.example            # Placeholders only — never real secrets
@@ -158,6 +166,35 @@ adminbot/
     the per-hop validation still blocks the common cases.
   - Analysis runs synchronously in the request (no background workers yet).
 
+### Business catalog
+
+- **Purpose**: the `business_catalog` app keeps a reviewable catalog of the
+  business's products, services, and articles, seeded from website-analysis
+  data. This is the foundation — no AI, no content generation, no
+  scheduling, no social publishing.
+- **How to use it**: log in as a staff user and open `/business-catalog/`.
+  The list page supports filtering by item type and review status, and a
+  button runs the initial extraction from the latest successful website
+  analysis. Each item has a detail page where title, type, description,
+  and review status (`pending` / `approved` / `rejected`) can be edited.
+- **Extraction rules**: only valid HTTP/HTTPS links on the analyzed site's
+  own hostname are imported; external, invalid, or unusable URLs are
+  skipped. The stored heuristic category maps to a suggested type
+  (`likely_product` → product, `likely_service` → service,
+  `likely_article` → article); anything else is recorded as `unknown`
+  rather than forced into a label. Extraction makes no HTTP requests —
+  it only reads already-stored analysis data — and processes at most 100
+  links per run.
+- **Deduplication**: the source URL is normalized (lowercased scheme/host,
+  fragment dropped, default ports and trailing slash removed) and its
+  SHA-256 hash is stored as `url_key`. The database enforces uniqueness of
+  `(business, url_key)`, so re-running extraction never creates duplicates;
+  existing items are left untouched and staff edits are never overwritten.
+  The hash keeps the unique index portable across SQLite and PostgreSQL.
+- **Known limitations**: the catalog is seeded from heuristic guesses, so
+  suggested types may be wrong until reviewed; extraction only looks at
+  the latest successful analysis; bulk approve/reject and multi-business
+  support are out of scope for this version.
 
 ## Scope boundary
 

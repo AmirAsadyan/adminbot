@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catalog item — AdminBot</title>
+</head>
+<body>
+  <main>
+    <h1>Catalog item</h1>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <dl>
+      <dt>Source URL</dt><dd>{{ item.source_url }}</dd>
+      <dt>Extracted from</dt><dd>{{ item.extraction_source|default:"—" }}</dd>
+      <dt>Created</dt><dd>{{ item.created_at }}</dd>
+      <dt>Updated</dt><dd>{{ item.updated_at }}</dd>
+    </dl>
+    <h2>Edit</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+          {{ field }}
+          {{ field.errors }}
+          {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit">Save</button>
+    </form>
+    <p><a href="{% url 'business_catalog:list' %}">Back to catalog</a></p>
+  </main>
+</body>
+</html>
